@@ -1,6 +1,4 @@
 	var gravite = 0.01;
-  var absX = 0;
-  var absY = 0;
 
   var keyEvent = {
     gauche: false,
@@ -12,30 +10,21 @@
     var canvas = document.getElementById('canvas');
     window.onkeydown = function(event){
       var code = event.keyCode;
-      event.preventDefault();
       switch(code){
        case 37:
+      event.preventDefault();
        keyEvent.gauche = true;
-
        break;
        case 38:
+      event.preventDefault();
        keyEvent.haut = true;
 
        break;
        case 39:
+      event.preventDefault();
        keyEvent.droite = true;
 
        break;
-       case 40:
-
-       break;
-
-       case 13:
-       break;
-
-       case 116:
-       location.reload();
-
      };
    };
 
@@ -61,15 +50,16 @@
     if(!vaisseau.crash){
       updateVaisseau();
     }
-    window.document.querySelector('#debug').innerHTML = 'PosX: ' + Math.floor(vaisseau.posX) + ' - PosY : ' + Math.floor(canvas.height - vaisseau.posY) + ' - Alt : ' + ((canvas.height - vaisseau.posY - 5 - absY) - terrain[Math.floor(mod(vaisseau.posX + absX,cfg.width))]) + ' - velX : ' + Math.floor(vaisseau.velX * 10) + ' - velY : ' + Math.floor(vaisseau.velY * 10) + '<br/> absX : ' + absX + ' - absY : ' + absY;
+    window.document.querySelector('#debug').innerHTML = 'PosX: ' + Math.floor(vaisseau.posX) + ' - PosY : ' + Math.floor(vaisseau.posY) + ' - Alt : ' + ((vaisseau.posY - 5) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))]) + ' - velX : ' + Math.floor(vaisseau.velX * 10) + ' - velY : ' + Math.floor(vaisseau.velY * 10) + '<br/> offsetX : ' + camera.offsetX + ' - offsetY : ' + camera.offsetY;
+    updateCamera();
     render(canvas);
     requestAnimationFrame(updateGame);
   };
 
   var startGame = function(){
     initializeTerrain();
-    generateTerrain(0, cfg.width -1, cfg.variance, cfg.amorti, 20);
-    generatePlateformes(cfg.nbPlateformes);
+    generateTerrain(0, cfgTerrain.width -1, cfgTerrain.variance, cfgTerrain.amorti, 20);
+    generatePlateformes(cfgTerrain.nbPlateformes);
     render(canvas);
   };
 

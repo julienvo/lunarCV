@@ -4,10 +4,10 @@ var variance = 500;
 var amorti = 0.95;
 
 var initializeTerrain = function(){
-  for(i = 0; i < cfg.width; i++){
+  for(i = 0; i < cfgTerrain.width; i++){
     terrain[i] = 0;
   }
-  terrain[0] = terrain[cfg.width - 1] = 200;
+  terrain[0] = terrain[cfgTerrain.width - 1] = 200;
 }
 
 var generateTerrain = function(indexDepart, indexArrivee, variance, amorti, level){
@@ -25,7 +25,7 @@ var generatePlateformes = function(nbPlateformes){
     let isValid = false;
     // Tant que la nouvelle plateforme est trop proche d'une plateforme déjà existante, on change sa position
     while(!isValid){
-      indexPlateforme = Math.floor(Math.random() * (cfg.width - 30));
+      indexPlateforme = Math.floor(Math.random() * (cfgTerrain.width - 30));
       isValid = true;
       for(let i of plateformes){
         if(indexPlateforme >= i-100 && indexPlateforme <= i+100){
@@ -33,10 +33,10 @@ var generatePlateformes = function(nbPlateformes){
         }
       }
     }
-    console.log(indexPlateforme);
+    //console.log(indexPlateforme);
     plateformes.push(indexPlateforme);
     for(let pixel = 0; pixel < 20; pixel++){
-      if(pixel + indexPlateforme < cfg.width){
+      if(pixel + indexPlateforme < cfgTerrain.width){
         terrain[indexPlateforme + pixel] = terrain[indexPlateforme];
       }
     }
