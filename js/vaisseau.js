@@ -1,6 +1,6 @@
 var vaisseau = {
   posX: 100,
-  posY: 1000,
+  posY: 800,
   angle: 0,
   velX: 0,
   velY: 0,
@@ -12,11 +12,11 @@ var vaisseau = {
 var isOnPlatform = function(vaisseau, plateformes){
   for(i of plateformes){
     if(mod((vaisseau.posX), cfgTerrain.width) >= i + 5 && mod((vaisseau.posX), cfgTerrain.width) <= i + 15) {
-      console.log('isOK')
+      //console.log('isOK')
       return true;
     } 
   }
-  console.log('isPasOK')
+  //console.log('isPasOK')
   return false;
 }
 
@@ -37,12 +37,13 @@ var updateVaisseau = function(){
   for(let x = -5; x < 5; x++){
     if((vaisseau.posY - 5) <= terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] ){
       if(vaisseau.velY > 1 || vaisseau.velX > 1 || !isOnPlatform(vaisseau, plateformes)){
-          console.log('crash');
+          //console.log('crash');
           vaisseau.crash = true;
       }
       else if(!vaisseau.crash && !vaisseau.pose){
-        console.log('posé');
+        //console.log('posé');
         vaisseau.pose = true;
+        vaisseau.posY = terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] + 5
       }
           gravite = 0;
           vaisseau.acc = 0;
