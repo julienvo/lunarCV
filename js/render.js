@@ -33,10 +33,12 @@ var camera = {
       this.offsetX += vaisseau.velX;
     }
 
-    if(!this.isZoomed && !(vaisseau.posY < canvas.height - this.marginY)){
+    //if(!this.isZoomed && !(vaisseau.posY < canvas.height - this.marginY)){
+      //console.log('test');
       this.offsetY = vaisseau.posY - canvas.height + this.marginY;
-    }
+    //}
     if(this.offsetY < this.bottom){
+      console.log(this.bottom);
       this.offsetY = this.bottom;
     }
   //  else if((canvas.height - (vaisseau.posY - this.offsetY) < this.marginY && vaisseau.velY > 0) || (vaisseau.posY - this.offsetY) < this.marginY && vaisseau.velY < 0){

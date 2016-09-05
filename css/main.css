@@ -1,3 +1,16 @@
 canvas{
   display: block;
 }
+
+#barreCompetences{
+  margin: 0 auto;
+  display: inline-block;
+}
+
+#barreCompetences div{
+  display: inline-block;
+}
+#barreCompetences img{
+  height: 80px;
+  width: auto;
+}

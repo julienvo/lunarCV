@@ -64,11 +64,24 @@ window.addEventListener('load', function(event){
 
 var updateGame = function(){
   if(!vaisseau.crash){
-    timeElapsed = (Date.now() - timeStart)
-
-
     updateVaisseau();
-  
+
+    // Si le vaisseau est sur une plateforme
+    if(vaisseau.pose){
+      // Si le vaisseau ne s'est pas encore posé sur la plateforme
+      // on affiche la compétence correspondante sous le canvas
+
+      if(vaisseau.currentPlatform.isActive){
+        console.log('posayToutNeuf');
+        vaisseau.currentPlatform.isActive = false;
+        
+        /* LOGIQUE D'AFFICHAGE DES COMPETENCES */
+
+      }
+
+
+
+    }
     //if(keyEvent.gauche){
     //  camera.offsetX--;
     //}
@@ -89,6 +102,7 @@ var updateGame = function(){
     //}
 
 
+    timeElapsed = (Date.now() - timeStart);
     window.document.querySelector('#debug').innerHTML = 'PosX: ' + Math.floor(vaisseau.posX) + ' - PosY : ' + Math.floor(vaisseau.posY) + ' - Alt : ' + Math.floor(((vaisseau.posY - 5) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))])) + ' - velX : ' + Math.floor(vaisseau.velX * 10) + ' - velY : ' + Math.floor(vaisseau.velY * 10) + '<br/> offsetX : ' + Math.floor(camera.offsetX) + ' - offsetY : ' + Math.floor(camera.offsetY) + ' - posYRel : ' + Math.floor(canvas.height - (vaisseau.posY) * camera.facteurZoom) + ' - posTerrainZoom : ' + Math.floor(((canvas.height - (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)]))));
     camera.update();
     renderGame(canvas);
@@ -99,10 +113,10 @@ var updateGame = function(){
 
 var startGame = function(){
   timeStart = Date.now();
-  infos.width = window.innerWidth;
+  canvas.height = window.innerHeight - 270;
   infos.height = 100;
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight - 200;
+  infos.width = document.body.clientWidth;
+  canvas.width = document.body.clientWidth;
 
   // génération du terrain
   initializeTerrain();
@@ -114,6 +128,7 @@ var startGame = function(){
   let extremites = extremePoints(terrain);
   vaisseau.init(extremites.highest.x - 300, extremites.highest.y + 200);
   camera.bottom = extremites.lowest.y - 50;
+  console.log(camera.bottom);
   camera.init(vaisseau.posX, vaisseau.posY);
 
   console.log(Math.floor(extremites.highest.y - extremites.lowest.y));
@@ -122,8 +137,9 @@ var startGame = function(){
 //    camera.offsetY = 400;
   renderGame(canvas);
   renderInfos(infos);
-};
 
+};
+console.log(document.body.clientWidth);
 startGame();
 updateGame();
 
