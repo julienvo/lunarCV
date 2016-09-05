@@ -114,7 +114,7 @@ var updateGame = function(){
 var startGame = function(){
   timeStart = Date.now();
   canvas.height = window.innerHeight - 270;
-  infos.height = 100;
+  infos.height = 82;
   infos.width = document.body.clientWidth;
   canvas.width = document.body.clientWidth;
 

@@ -107,22 +107,22 @@ var renderInfos = function(canvas){
   ctx.fillRect(0,0,canvas.width, canvas.height);
   ctx.fillStyle = '#fff';
   ctx.font = '16px Arial';
-  ctx.fillText('Score : ', 50, 30);
-  ctx.fillText('Time : ' + formatTime(timeElapsed), 50, 60);
-  ctx.fillText('Fuel : ' + Math.round(vaisseau.fuel), 50, 90);
-  ctx.fillText('Alt : ' + Math.floor(((vaisseau.posY - 5) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))])/4), canvas.width - 250, 30);
-  ctx.fillText("Horizontal speed : ", canvas.width - 250, 60);
-  ctx.fillText("Vertical speed : ", canvas.width - 250, 90);
+  ctx.fillText('Score : ', 50, 26);
+  ctx.fillText('Time : ' + formatTime(timeElapsed), 50, 52);
+  ctx.fillText('Fuel : ' + Math.round(vaisseau.fuel), 50, 78);
+  ctx.fillText('Alt : ' + Math.floor(((vaisseau.posY - 5) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))])/4), canvas.width - 250, 26);
+  ctx.fillText("Horizontal speed : ", canvas.width - 250, 52);
+  ctx.fillText("Vertical speed : ", canvas.width - 250, 78);
 
   if(Math.abs(vaisseau.velX) > vaisseau.vlimX){
     ctx.fillStyle = 'red';
   }
-  ctx.fillText(Math.round(vaisseau.velX * 5), canvas.width - 115, 60);
+  ctx.fillText(Math.round(vaisseau.velX * 5), canvas.width - 115, 52);
   if(vaisseau.velY < - vaisseau.vlimY){
     ctx.fillStyle = 'red';
   }
   else{
     ctx.fillStyle = '#fff';
   }
-  ctx.fillText(Math.round(vaisseau.velY * 5), canvas.width - 135, 90);
+  ctx.fillText(Math.round(vaisseau.velY * 5), canvas.width - 135, 78);
 };

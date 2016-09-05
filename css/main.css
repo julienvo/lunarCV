@@ -1,10 +1,15 @@
+html {
+       overflow-y: scroll;
+}
+
 canvas{
   display: block;
 }
 
 #barreCompetences{
   margin: 0 auto;
-  display: inline-block;
+  display: block;
+  text-align: center;
 }
 
 #barreCompetences div{
@@ -13,4 +18,5 @@ canvas{
 #barreCompetences img{
   height: 80px;
   width: auto;
+  display: block;
 }
