@@ -5,4 +5,4 @@ var cfgTerrain = {
   amorti: 1
 }
 
-var gravite = 0.01;
+var gravite = 0.005;
