@@ -1,7 +1,5 @@
 var terrain = [];
 var plateformes = [];
-var variance = 500;
-var amorti = 0.95;
 
 var initializeTerrain = function(){
   for(i = 0; i < cfgTerrain.width; i++){
@@ -28,13 +26,13 @@ var generatePlateformes = function(nbPlateformes){
       indexPlateforme = Math.floor(Math.random() * (cfgTerrain.width - 30));
       isValid = true;
       for(let i of plateformes){
-        if(indexPlateforme >= i-100 && indexPlateforme <= i+100){
+        if(indexPlateforme >= i.index-100 && indexPlateforme <= i.index+100){
           isValid = false;
         }
       }
     }
     //console.log(indexPlateforme);
-    plateformes.push(indexPlateforme);
+    plateformes.push({index: indexPlateforme, isActive: true});
     for(let pixel = 0; pixel < 20; pixel++){
       if(pixel + indexPlateforme < cfgTerrain.width){
         terrain[indexPlateforme + pixel] = terrain[indexPlateforme];
