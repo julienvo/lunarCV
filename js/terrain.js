@@ -18,6 +18,7 @@ var generateTerrain = function(indexDepart, indexArrivee, variance, amorti, leve
 };
 
 var generatePlateformes = function(nbPlateformes){
+  let plateformes = [];
   for(let plateforme = 0; plateforme< nbPlateformes; plateforme++){
     let indexPlateforme;
     let isValid = false;
@@ -39,5 +40,6 @@ var generatePlateformes = function(nbPlateformes){
       }
     }
   }
+  return plateformes;
 
 };
