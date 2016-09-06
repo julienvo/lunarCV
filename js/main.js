@@ -6,7 +6,7 @@ var keyEvent = {
   entree: false
 };
 
-var timeStart, timeElapsed;
+var timeStart, timeElapsed, compteur;
 
 window.addEventListener('load', function(event){
   var canvas = document.getElementById('canvas');
@@ -74,7 +74,11 @@ var updateGame = function(){
       if(vaisseau.currentPlatform.isActive){
         console.log('posayToutNeuf');
         vaisseau.currentPlatform.isActive = false;
-        
+        let competence = document.getElementById(competences[compteur]);
+        competence.classList.remove('hidden');
+        setTimeout(function(){competence.style.opacity = 1;}, 100);
+        compteur++;
+
         /* LOGIQUE D'AFFICHAGE DES COMPETENCES */
 
       }
@@ -112,6 +116,7 @@ var updateGame = function(){
 };
 
 var startGame = function(){
+  compteur = 0;
   timeStart = Date.now();
   canvas.height = window.innerHeight - 270;
   infos.height = 82;
@@ -121,7 +126,7 @@ var startGame = function(){
   // génération du terrain
   initializeTerrain();
   generateTerrain(0, cfgTerrain.width -1, cfgTerrain.variance, cfgTerrain.amorti, 20);
-  generatePlateformes(cfgTerrain.nbPlateformes);
+  plateformes = generatePlateformes(cfgTerrain.nbPlateformes);
 
   // Positionnement du vaisseau en haut et à gauche du point le plus haut
   // Et configuration de la limite basse de la caméra
