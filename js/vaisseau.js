@@ -14,6 +14,13 @@ var vaisseau = {
   init: function(x, y){
     this.posX = x;
     this.posY = y;
+    this.angle = 0;
+    this.velX = 0;
+    this.velY = 0;
+    this.acc = 0;
+    this.crash = false;
+    this.pose = false;
+    this.currentPlatform = null;
   }
 };
 
@@ -33,13 +40,6 @@ var isOnPlatform = function(vaisseau, plateformes){
 }
 
 var updateVaisseau = function(){
-  if(keyEvent.gauche && !vaisseau.pose){
-    vaisseau.angle -= Math.PI/60;
-  }
-  if(keyEvent.droite && !vaisseau.pose){
-    vaisseau.angle += Math.PI/60;
-  }
-  vaisseau.acc = (keyEvent.haut) ? 0.0125 : 0;
   vaisseau.fuel -= 3 * vaisseau.acc;
 
   vaisseau.velX += vaisseau.acc * Math.sin(vaisseau.angle);

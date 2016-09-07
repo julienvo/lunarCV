@@ -31,6 +31,9 @@ var extremePoints = function(terrain) {
 }
 
 var formatTime = function(time){
+  if(isNaN(time)){
+    return '0:00'
+  }
   let secs = Math.floor(time / 1000);
   let mins = Math.floor(secs / 60);
   secs = secs % 60;
