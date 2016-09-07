@@ -7,18 +7,26 @@ var keyEvent = {
 };
 
 var timeStart, timeElapsed, compteur;
+var state = 'start'
 
 window.addEventListener('load', function(event){
+  var message = document.getElementById('message');
   var canvas = document.getElementById('canvas');
   var infos = document.getElementById('infos');
 
   window.onkeydown = function(event){
     var code = event.keyCode;
     switch(code){
-
       case 13:
       event.preventDefault();
       keyEvent.entree = true;
+      break;
+      case 32:
+      event.preventDefault();
+      if(state == 'gameOver'){
+        initGame();
+      }
+      startGame();
       break;
       case 37:
       event.preventDefault();
@@ -41,29 +49,30 @@ window.addEventListener('load', function(event){
   };
 
   window.onkeyup = function(event){
-   event.preventDefault();
-   var code = event.keyCode;
-   switch(code){            
-    case 13:
-    keyEvent.entree = false;
-    break;
-    case 37:
-    keyEvent.gauche = false;
-    break;
-    case 38:
-    keyEvent.haut = false;
-    break;
-    case 39:
-    keyEvent.droite = false;
-    break;
-    case 40:
-    keyEvent.bas = false;
-    break;
+    event.preventDefault();
+    var code = event.keyCode;
+    switch(code){            
+      case 13:
+      keyEvent.entree = false;
+      break;
+      case 37:
+      keyEvent.gauche = false;
+      break;
+      case 38:
+      keyEvent.haut = false;
+      break;
+      case 39:
+      keyEvent.droite = false;
+      break;
+      case 40:
+      keyEvent.bas = false;
+      break;
+    };
   };
-};
 
 var updateGame = function(){
-  if(!vaisseau.crash){
+
+  if(!vaisseau.crash && state == 'playing'){
     updateVaisseau();
 
     // Si le vaisseau est sur une plateforme
@@ -86,6 +95,16 @@ var updateGame = function(){
 
 
     }
+    else{
+      if(keyEvent.gauche){
+        vaisseau.angle -= Math.PI/60;
+      }
+      if(keyEvent.droite){
+        vaisseau.angle += Math.PI/60;
+      }
+    }
+    vaisseau.acc = (keyEvent.haut) ? 0.0125 : 0;
+
     //if(keyEvent.gauche){
     //  camera.offsetX--;
     //}
@@ -113,15 +132,14 @@ var updateGame = function(){
     renderInfos(infos);
     requestAnimationFrame(updateGame);
   }
+  else{
+    state = 'gameOver';
+    message.innerHTML = 'You died.<br/><br/>(noob.) <br/><br/>Press Space to restart';
+    message.style.display = 'block';
+  }
 };
 
-var startGame = function(){
-  compteur = 0;
-  timeStart = Date.now();
-  canvas.height = window.innerHeight - 270;
-  infos.height = 82;
-  infos.width = document.body.clientWidth;
-  canvas.width = document.body.clientWidth;
+var initGame = function(){  
 
   // génération du terrain
   initializeTerrain();
@@ -133,19 +151,33 @@ var startGame = function(){
   let extremites = extremePoints(terrain);
   vaisseau.init(extremites.highest.x - 300, extremites.highest.y + 200);
   camera.bottom = extremites.lowest.y - 50;
-  console.log(camera.bottom);
   camera.init(vaisseau.posX, vaisseau.posY);
-
-  console.log(Math.floor(extremites.highest.y - extremites.lowest.y));
-//    vaisseau.posX = plateformes[0] + 8;
-//    camera.offsetX = plateformes[0] - 150;
-//    camera.offsetY = 400;
   renderGame(canvas);
   renderInfos(infos);
 
+  //
+
+  message.innerHTML = 'Press Space to start';
+  message.style.display = 'block';
+
+}
+
+var startGame = function(){
+  console.log(!(state == 'playing'));
+  if(!(state == 'playing')){
+    state = 'playing';
+    compteur = 0;
+    timeStart = Date.now();
+    updateGame();
+    message.style.display = 'none';
+  }
 };
-console.log(document.body.clientWidth);
-startGame();
-updateGame();
+
+
+canvas.height = window.innerHeight - 270;
+infos.height = 82;
+infos.width = document.body.clientWidth;
+canvas.width = document.body.clientWidth;
+initGame();
 
 });

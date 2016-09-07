@@ -22,6 +22,7 @@ nav div{
   display: inline-block;
   padding: 10px;
   background-color: #ddd;
+  color: #444;
 }
 
 nav a{
@@ -76,6 +77,20 @@ nav a:hover{
     visibility: visible;
 }
 
+#message{
+  text-align: center;
+  vertical-align: middle;
+  background: #000;
+  color: #fff;
+  height: 200px;
+  width: 300px;
+  border: 1px dashed white;
+  border-radius: 10px;
+  position: absolute;
+  top: 300px;
+  margin-left: 40%;
+  display: none;
+}
 
 #barreCompetences{
   margin: 0 auto;
@@ -102,4 +117,8 @@ nav a:hover{
   height: 80px;
   width: auto;
   display: block;
+}
+
+#debug{
+  height: 32px;
 }
