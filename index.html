@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/fontello.css">
+  <script src="js/cheat.js"></script>
+  <script src="js/infos.js"></script>
   <script src="js/main.js"></script>
   <script src="js/math.js"></script>
   <script src="js/config.js"></script>
@@ -16,7 +18,8 @@
 <body>
   <nav id="navbar">
     <div class="navbar-gauche">
-      <span class="nom">Julien VONAU</span>
+      <span class="nom">Julien Vonau</span>
+      <span id="cheatButton" class="icon-mail"></span>
       <a href="assets/cv.pdf"><span class="icon-doc-text tooltip"><span class="tooltiptext">Télécharger mon CV au format PDF</span></span></a>
     </div>
     <div class="navbar-droite">
@@ -27,18 +30,18 @@
   </nav>
   <div id='debug'></div>
   <canvas id="infos"></canvas><canvas id="canvas"></canvas>
-  <div id="message"></div>
+  <div id="messageContainer"><div id="message"></div></div>
   <div id="barreCompetences">
-    <div id="htmlcss" class="hidden"><img src="img/html_css.png" alt="html-css"></div>
-    <div id="vanillajs" class="hidden"><img src="img/js.png" alt="vanillajs"></div>
-    <div id="jquery" class="hidden"><img src="img/jquery-logo.png" alt="jquery"></div>
-    <div id="bootstrap" class="hidden"><img src="img/bootstrap.png" alt="bootstrap"></div>
-    <div id="angular" class="hidden"><img src="img/angularlogo.png" alt="angular"></div>
-    <div id="mongo" class="hidden"><img src="img/mongodb-logo.png" alt="mongo"></div>
-    <div id="nodejs" class="hidden"><img src="img/nodejs-logo.png" alt="node"></div>
-    <div id="ajax" class="hidden"><img src="img/ajaxlogo.png" alt="ajax"></div>
-    <div id="express" class="hidden"><img src="img/expresslogo.png" alt="express"></div>
-    <div id="meteor" class="hidden"><img src="img/meteorjs-logo-red.png" alt="meteor"></div>
+    <div id="htmlcss"><img src="img/html_css.png" alt="html-css"></div>
+    <div id="vanillajs"><img src="img/js.png" alt="vanillajs"></div>
+    <div id="jquery"><img src="img/jquery-logo.png" alt="jquery"></div>
+    <div id="bootstrap"><img src="img/bootstrap.png" alt="bootstrap"></div>
+    <div id="angular"><img src="img/angularlogo.png" alt="angular"></div>
+    <div id="mongo"><img src="img/mongodb-logo.png" alt="mongo"></div>
+    <div id="nodejs"><img src="img/nodejs-logo.png" alt="node"></div>
+    <div id="ajax"><img src="img/ajaxlogo.png" alt="ajax"></div>
+    <div id="express"><img src="img/expresslogo.png" alt="express"></div>
+    <div id="meteor"><img src="img/meteorjs-logo-red.png" alt="meteor"></div>
   </div>
 </body>
 </html>

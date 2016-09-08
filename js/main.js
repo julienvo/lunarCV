@@ -7,7 +7,7 @@ var keyEvent = {
 };
 
 var timeStart, timeElapsed, compteur;
-var state = 'start'
+var state = 'start';
 
 window.addEventListener('load', function(event){
   var message = document.getElementById('message');
@@ -16,11 +16,19 @@ window.addEventListener('load', function(event){
 
   window.onkeydown = function(event){
     var code = event.keyCode;
+    lastKeys.shift();
+    lastKeys.push(code);
+    console.log(lastKeys)
+    if(arraysEqual(lastKeys,cheatCode)){
+      afficherIcones();
+    }
+
     switch(code){
       case 13:
       event.preventDefault();
       keyEvent.entree = true;
       break;
+
       case 32:
       event.preventDefault();
       if(state == 'gameOver'){
@@ -28,23 +36,26 @@ window.addEventListener('load', function(event){
       }
       startGame();
       break;
+
       case 37:
       event.preventDefault();
       keyEvent.gauche = true;
       break;
+
       case 38:
       event.preventDefault();
       keyEvent.haut = true;
-
       break;
+
       case 39:
       event.preventDefault();
       keyEvent.droite = true;
-
       break;
+
       case 40:
       event.preventDefault();
       keyEvent.bas = true;
+      break;
     };
   };
 
@@ -79,7 +90,6 @@ var updateGame = function(){
     if(vaisseau.pose){
       // Si le vaisseau ne s'est pas encore posé sur la plateforme
       // on affiche la compétence correspondante sous le canvas
-
       if(vaisseau.currentPlatform.isActive){
         console.log('posayToutNeuf');
         vaisseau.currentPlatform.isActive = false;
@@ -87,15 +97,9 @@ var updateGame = function(){
         competence.classList.remove('hidden');
         setTimeout(function(){competence.style.opacity = 1;}, 100);
         compteur++;
-
-        /* LOGIQUE D'AFFICHAGE DES COMPETENCES */
-
       }
-
-
-
     }
-    else{
+    else{ // Le vaisseau ne peut pas tourner si il est posé sur une plateforme
       if(keyEvent.gauche){
         vaisseau.angle -= Math.PI/60;
       }
@@ -132,10 +136,10 @@ var updateGame = function(){
     renderInfos(infos);
     requestAnimationFrame(updateGame);
   }
-  else{
+  else{ // Game over :(
     state = 'gameOver';
-    message.innerHTML = 'You died.<br/><br/>(noob.) <br/><br/>Press Space to restart';
-    message.style.display = 'block';
+    showMessage('You died.<br/><br/>(noob.) <br/><br/>Press Space to restart');
+
   }
 };
 
@@ -155,11 +159,16 @@ var initGame = function(){
   renderGame(canvas);
   renderInfos(infos);
 
-  //
+  // Masquage des logos des compétences
+  var divs = document.querySelectorAll('#barreCompetences div');
+  [].forEach.call(divs, function(div) {
+    div.className += " hidden";
+    div.style.opacity = 0;
+  });
 
-  message.innerHTML = 'Press Space to start';
-  message.style.display = 'block';
 
+
+  showMessage('Appuyez sur espace pour jouer. <br /><br />Pour accéder directement à mon CV, il suffit d\'entrer le cheat code le plus célèbre de l\'histoire. (Ou vous pouvez aussi appuyer sur le bouton à côté de mon nom.)');
 }
 
 var startGame = function(){
@@ -169,7 +178,7 @@ var startGame = function(){
     compteur = 0;
     timeStart = Date.now();
     updateGame();
-    message.style.display = 'none';
+    messageContainer.style.display = 'none';
   }
 };
 

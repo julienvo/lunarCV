@@ -12,6 +12,7 @@ var vaisseau = {
   vlimX: 1,
   vlimY: 1.5,
   init: function(x, y){
+    this.fuel = 400;
     this.posX = x;
     this.posY = y;
     this.angle = 0;
