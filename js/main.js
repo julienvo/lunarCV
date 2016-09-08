@@ -82,8 +82,12 @@ window.addEventListener('load', function(event){
   };
 
 var updateGame = function(){
+  if(compteur == 10){
+    showMessage('Vous avez gagné !!! <br /><br /> Vous pouvez accéder à la version pdf de mon CV en cliquant sur le lien dans la navbar.');
+    afficherIcones();
+  }
 
-  if(!vaisseau.crash && state == 'playing'){
+  else if(!vaisseau.crash && state == 'playing'){
     updateVaisseau();
 
     // Si le vaisseau est sur une plateforme
