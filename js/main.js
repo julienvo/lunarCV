@@ -153,6 +153,9 @@ var initGame = function(){
   initializeTerrain();
   generateTerrain(0, cfgTerrain.width -1, cfgTerrain.variance, cfgTerrain.amorti, 20);
   plateformes = generatePlateformes(cfgTerrain.nbPlateformes);
+ 
+  // génération du ciel
+  generateSky(canvas.width, canvas.height, 1800);
 
   // Positionnement du vaisseau en haut et à gauche du point le plus haut
   // Et configuration de la limite basse de la caméra

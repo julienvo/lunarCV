@@ -69,7 +69,45 @@ var renderGame = function(canvas){
     ctx.fillStyle = '#aaa';
     ctx.fillRect(-5 * camera.facteurZoom,5 * camera.facteurZoom, 10 * camera.facteurZoom, 5 * camera.facteurZoom);
   }
+
+//  ctx.strokeStyle = "#fff";
+//  ctx.lineWidth = 1;
+//  ctx.moveTo(-6,0);
+//  ctx.lineTo(0,-5);
+//  ctx.lineTo(6,0);
+//  ctx.lineTo(6,6);
+//  ctx.lineTo(3,10);
+//  ctx.lineTo(-3,10);
+//  ctx.lineTo(-6,6);
+//  ctx.closePath();
+//  
+//  ctx.rect(-7,10,14,2);
+//  
+//  ctx.moveTo(-7,12);
+//  ctx.lineTo(-8,16);
+//  ctx.lineTo(-11,16);
+//  
+//  ctx.moveTo(7,12);
+//  ctx.lineTo(8,16);
+//  ctx.lineTo(11,16);
+//  
+//  ctx.moveTo(-2,12);
+//  ctx.lineTo(-5,15);
+//  ctx.lineTo(5,15);
+//  ctx.lineTo(2,12);
+//  ctx.stroke();
 	ctx.restore(); // coord défaut, pile vide
+
+
+
+  // Dessin du ciel
+
+  ctx.fillStyle = '#fff';
+  for(i in stars){
+    if(stars[i].y > terrain[mod(Math.floor(stars[i].x + camera.offsetX),cfgTerrain.width)] - Math.floor(camera.offsetY)){
+      ctx.fillRect(stars[i].x, canvas.height - stars[i].y, stars[i].size, stars[i].size);
+    }
+  }
 
   // Dessin du terrain
   ctx.strokeStyle = '#fff';
