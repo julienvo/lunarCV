@@ -126,7 +126,10 @@ var updateGame = function(){
       vaisseau.acc = (vaisseau.fuel > 0 ) ? 0.0125 : 0;
       son.play();
     }
-    else{son.pause();}
+    else{
+      vaisseau.acc = 0;
+      son.pause();
+    }
 
 
     timeElapsed = (Date.now() - timeStart);
