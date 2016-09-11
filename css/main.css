@@ -82,11 +82,20 @@ nav a:hover, #cheatButton:hover{
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+
+/* Corps */
+
+#container:{
+  position: relative;
+}
+
 #messageContainer{
   position: absolute;
-  top: 300px;
-  margin-left: 40%;
   display: none;
+  left: 50%;
+  top: 50%;
+  margin: -100px 0 0 -200px;
   border: 1px dashed white;
   border-radius: 10px;
   background: #000;

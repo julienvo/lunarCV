@@ -30,6 +30,18 @@ var camera = {
   }
 };
 
+
+// Modifie la taille du canvas si l'utilisateur modifie la taille de la fenêtre
+window.addEventListener('resize', function(){
+  canvas.height = window.innerHeight - 238;
+  infos.height = 82;
+  infos.width = document.body.clientWidth;
+  canvas.width = document.body.clientWidth;
+  renderGame(canvas);
+  renderInfos(infos);
+}, false);
+
+
 // Affiche le jeu
 var renderGame = function(canvas){
   var ctx = canvas.getContext("2d");
