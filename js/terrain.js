@@ -1,45 +1,58 @@
 var terrain = [];
 var plateformes = [];
-var variance = 500;
-var amorti = 0.95;
 
 var initializeTerrain = function(){
-  for(i = 0; i < cfg.width; i++){
+  for(var i = 0; i < cfgTerrain.width; i++){
     terrain[i] = 0;
   }
-  terrain[0] = terrain[cfg.width - 1] = 200;
+  terrain[0] = terrain[cfgTerrain.width - 1] = 200;
 }
 
-var generateTerrain = function(indexDepart, indexArrivee, variance, amorti, level){
-  if(indexDepart + 1 == indexArrivee || level == 0) { return;}
-  let indexMilieu = Math.floor((indexDepart + indexArrivee ) / 2);
+// Génère le terrain :
+// Prend les 2 points extrêmes du terrain, on calcule l'abscisse du point du milieu
+// puis déplace verticalment et aléatoirement ce point.
+// Applique récursivement la fonction sur les 2 segments obtenus jusqu'à ce que tous les points du terrain
+// aient été traités, en diminuant à chaque récursion la valeur maximale du déplacement.
+
+var generateTerrain = function(indexDepart, indexArrivee, variance, amorti){
+  if(indexDepart + 1 == indexArrivee) { return;}
+  var indexMilieu = Math.floor((indexDepart + indexArrivee ) / 2);
   terrain[indexMilieu] = (terrain[indexDepart] + terrain[indexArrivee]) / 2 + (Math.random() - 0.3) * variance;
-  //console.log(terrain[indexDepart], terrain[indexMilieu], terrain[indexArrivee]);
-  generateTerrain(indexDepart, indexMilieu, variance * amorti, amorti * 0.75, level - 1);
-  generateTerrain(indexMilieu, indexArrivee, variance * amorti, amorti * 0.75, level - 1);
+  if(debug){
+    console.log(terrain[indexDepart], terrain[indexMilieu], terrain[indexArrivee]);
+  }
+  generateTerrain(indexDepart, indexMilieu, variance * amorti, amorti * 0.75);
+  generateTerrain(indexMilieu, indexArrivee, variance * amorti, amorti * 0.75);
 };
 
+// Génère nbPlateformes placées de façon aléatoire sur le terrain
 var generatePlateformes = function(nbPlateformes){
-  for(let plateforme = 0; plateforme< nbPlateformes; plateforme++){
-    let indexPlateforme;
-    let isValid = false;
+  var plateformes = [];
+  for(var plateforme = 0; plateforme< nbPlateformes; plateforme++){
+    var indexPlateforme;
     // Tant que la nouvelle plateforme est trop proche d'une plateforme déjà existante, on change sa position
+    var isValid = false;
     while(!isValid){
-      indexPlateforme = Math.floor(Math.random() * (cfg.width - 30));
+      indexPlateforme = Math.floor(Math.random() * (cfgTerrain.width - 30));
       isValid = true;
-      for(let i of plateformes){
-        if(indexPlateforme >= i-100 && indexPlateforme <= i+100){
+      for(var i=0; i< plateformes.length; i++){
+        if(indexPlateforme >= plateformes[i].index-100 && indexPlateforme <= plateformes[i].index+100){
           isValid = false;
         }
       }
     }
-    console.log(indexPlateforme);
-    plateformes.push(indexPlateforme);
-    for(let pixel = 0; pixel < 20; pixel++){
-      if(pixel + indexPlateforme < cfg.width){
+    if(debug){
+      console.log(indexPlateforme);
+    }
+    // Ajout de la plateforme à la liste des plateformes
+    plateformes.push({index: indexPlateforme, isActive: true});
+    // Aplanissement du terrain correspondant à la plateforme
+    for(var pixel = 0; pixel < 30; pixel++){
+      if(pixel + indexPlateforme < cfgTerrain.width){
         terrain[indexPlateforme + pixel] = terrain[indexPlateforme];
       }
     }
   }
 
+  return plateformes;
 };
