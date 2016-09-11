@@ -139,6 +139,7 @@ window.addEventListener('load', function(event){
       requestAnimationFrame(updateGame);
     }
     else{ // Game over :(
+      boom.play();
       state = 'gameOver';
       showMessage('You died.<br/><br/>(noob.) <br/><br/>Press Space to restart');
     }
