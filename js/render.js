@@ -143,7 +143,7 @@ var renderInfos = function(canvas){
   ctx.font = '16px Arial';
   ctx.fillText('Score : ' + score, 50, 26);
   ctx.fillText('Time : ' + formatTime(timeElapsed), 50, 52);
-  ctx.fillText('Fuel : ' + Math.round(vaisseau.fuel), 50, 78);
+  ctx.fillText('Fuel : ' + Math.floor(vaisseau.fuel), 50, 78);
   ctx.fillText('Alt : ' + Math.floor(((vaisseau.posY - 8) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))])/4), canvas.width - 250, 26);
   ctx.fillText("Horizontal speed : ", canvas.width - 250, 52);
   ctx.fillText("Vertical speed : ", canvas.width - 250, 78);

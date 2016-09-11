@@ -131,8 +131,14 @@ window.addEventListener('load', function(event){
       }
 
       if(keyEvent.haut){
-        vaisseau.acc = (vaisseau.fuel > 0 ) ? 0.0125 : 0;
-        son.play();
+        if(vaisseau.fuel > 0){
+          vaisseau.acc = 0.0125;
+          son.play();
+        }
+        else{
+          vaisseau.acc = 0;
+          son.pause();
+        }
       }
       else{
         vaisseau.acc = 0;
