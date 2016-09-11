@@ -14,8 +14,8 @@ var vaisseau = {
   vlimY: 1,
   lastVelX: 0,
   lastVelY: 0,
-  init: function(x, y){
-    this.fuel = this.maxFuel;
+  init: function(x, y, reset){
+    if(reset) this.fuel = this.maxFuel;
     this.posX = x;
     this.posY = y;
     this.angle = 0;

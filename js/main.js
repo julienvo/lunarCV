@@ -34,10 +34,18 @@ window.addEventListener('load', function(event){
 
       case 32:
       event.preventDefault();
-      if(state == 'gameOver'){
-        initGame();
+      if( state == 'crash'){ // Repart depuis un endroit sur, en gardant les compétences déjà acquises
+        vaisseau.init(vaisseau.posX, terrain[Math.floor(mod(vaisseau.posX, cfgTerrain.width))] + 150, false);
+        state = 'playing';
+        message.style.display = 'none';
+        updateGame();
       }
-      startGame();
+      else{
+        if(state == 'gameOver'){ // Restart complètement
+          initGame();
+        }
+        startGame();
+      }
       break;
 
       case 37:
@@ -138,10 +146,16 @@ window.addEventListener('load', function(event){
       renderInfos(infos);
       requestAnimationFrame(updateGame);
     }
-    else{ // Game over :(
+    else{ // crash :(
       boom.play();
-      state = 'gameOver';
-      showMessage('You died.<br/><br/>(noob.) <br/><br/>Press Space to restart');
+      if(vaisseau.fuel > 0){ // try again
+        state = 'crash';
+        showMessage('Vous vous êtes crashé. Appuyez sur espace pour reprendre depuis un endroit sur.');
+      }
+      else{ // game over
+        state = 'gameOver';
+        showMessage('Vous n\'avez plus d\'essence, Game Over :( <br/><br/>Appuyez sur espace pour recommencer.');
+      }
     }
   };
 
@@ -158,13 +172,15 @@ window.addEventListener('load', function(event){
     // Positionnement du vaisseau en haut et à gauche du point le plus haut
     // Et configuration de la limite basse de la caméra
     var extremites = extremePoints(terrain);
-    vaisseau.init(extremites.highest.x - 300, extremites.highest.y + 200);
+    vaisseau.init(extremites.highest.x - 300, extremites.highest.y + 200, true);
     camera.bottom = extremites.lowest.y - 50;
     camera.init(vaisseau.posX, vaisseau.posY);
     renderGame(canvas);
     renderInfos(infos);
 
     // Masquage des logos des compétences
+
+    compteurCompetences = 0;
     var divs = document.querySelectorAll('#barreCompetences div');
     [].forEach.call(divs, function(div) {
       div.className += " hidden";
@@ -178,9 +194,7 @@ window.addEventListener('load', function(event){
   var startGame = function(){
     if(!(state == 'playing')){
       state = 'playing';
-      compteurCompetences = 0;
       compteurFrames = 0;
-      scoreTemps = 0;
       timeStart = Date.now();
       updateGame();
       messageContainer.style.display = 'none';
