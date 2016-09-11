@@ -44,8 +44,9 @@ window.addEventListener('resize', function(){
 
 // Affiche le jeu
 var renderGame = function(canvas){
+  console.log('render');
   var ctx = canvas.getContext("2d");
-  
+  ctx.clearRect(0,0, canvas.width, canvas.height);
   ctx.save(); // pile -> coord défaut
 
   // Dessin du fond
@@ -59,6 +60,7 @@ var renderGame = function(canvas){
   ctx.lineWidth = 1;
   //Corps
   //ctx.scale(4,4)
+  ctx.beginPath();
   ctx.moveTo(2,-4);
   ctx.lineTo(4, -2);
   ctx.lineTo(4, 2);
