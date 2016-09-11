@@ -37,7 +37,7 @@ window.addEventListener('load', function(event){
       if( state == 'crash'){ // Repart depuis un endroit sur, en gardant les compétences déjà acquises
         vaisseau.init(vaisseau.posX, terrain[Math.floor(mod(vaisseau.posX, cfgTerrain.width))] + 150, false);
         state = 'playing';
-        message.style.display = 'none';
+        hideMessage();
         updateGame();
       }
       else{
@@ -203,7 +203,7 @@ window.addEventListener('load', function(event){
       compteurFrames = 0;
       timeStart = Date.now();
       updateGame();
-      messageContainer.style.display = 'none';
+      hideMessage();
     }
   };
 

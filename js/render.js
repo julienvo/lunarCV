@@ -44,7 +44,6 @@ window.addEventListener('resize', function(){
 
 // Affiche le jeu
 var renderGame = function(canvas){
-  console.log('render');
   var ctx = canvas.getContext("2d");
   ctx.clearRect(0,0, canvas.width, canvas.height);
   ctx.save(); // pile -> coord défaut
