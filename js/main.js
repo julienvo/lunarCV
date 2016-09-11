@@ -1,3 +1,5 @@
+var debug = false;
+
 var keyEvent = {
   gauche: false,
   droite: false,
@@ -6,8 +8,9 @@ var keyEvent = {
   entree: false
 };
 
-var timeStart, timeElapsed, compteur;
+var timeStart, timeElapsed, compteur, compteurFrames;
 var state = 'start';
+var score = 8000;
 
 window.addEventListener('load', function(event){
   var message = document.getElementById('message');
@@ -15,10 +18,10 @@ window.addEventListener('load', function(event){
   var infos = document.getElementById('infos');
 
   window.onkeydown = function(event){
+    // Stocke les 8 dernières touches entrées pour le cheat code :o
     var code = event.keyCode;
     lastKeys.shift();
     lastKeys.push(code);
-    console.log(lastKeys)
     if(arraysEqual(lastKeys,cheatCode)){
       afficherIcones();
     }
@@ -70,6 +73,7 @@ window.addEventListener('load', function(event){
       keyEvent.gauche = false;
       break;
       case 38:
+      son.pause();
       keyEvent.haut = false;
       break;
       case 39:
@@ -82,8 +86,14 @@ window.addEventListener('load', function(event){
   };
 
 var updateGame = function(){
-  if(compteur == 10){
-    showMessage('Vous avez gagné !!! <br /><br /> Vous pouvez accéder à la version pdf de mon CV en cliquant sur le lien dans la navbar.');
+  compteurFrames++;
+  if(compteurFrames % 50 == 0){
+    score -= 50;
+  }
+
+  // Message de victoire
+  if(compteurCompetences == 10){
+    showMessage('Vous avez gagné !!! <br /><br /> Vous pouvez désormais accéder à la version pdf de mon CV en cliquant sur le lien dans la navbar.');
     afficherIcones();
   }
 
@@ -95,12 +105,12 @@ var updateGame = function(){
       // Si le vaisseau ne s'est pas encore posé sur la plateforme
       // on affiche la compétence correspondante sous le canvas
       if(vaisseau.currentPlatform.isActive){
-        console.log('posayToutNeuf');
+        score += Math.max(Math.round(2000 * (1-(vaisseau.lastVelX - vaisseau.lastVelY))), 0);
         vaisseau.currentPlatform.isActive = false;
-        let competence = document.getElementById(competences[compteur]);
-        competence.classList.remove('hidden');
+        var competence = document.querySelector('#'+competences[compteurCompetences]);
+        competence.className = '';
         setTimeout(function(){competence.style.opacity = 1;}, 100);
-        compteur++;
+        compteurCompetences++;
       }
     }
     else{ // Le vaisseau ne peut pas tourner si il est posé sur une plateforme
@@ -111,30 +121,15 @@ var updateGame = function(){
         vaisseau.angle += Math.PI/60;
       }
     }
-    vaisseau.acc = (keyEvent.haut) ? 0.0125 : 0;
 
-    //if(keyEvent.gauche){
-    //  camera.offsetX--;
-    //}
-    //if(keyEvent.droite){
-    //  camera.offsetX++;
-    //}
-    //if(keyEvent.haut){
-    //  camera.offsetY++;
-    //}
-    //if(keyEvent.bas){
-    //  camera.offsetY--;
-    //}
-    //if(keyEvent.entree){
-    //  if(camera.facteurZoom == 1){
-    //    camera.facteurZoom  = 2;
-    //  }
-    //  else camera.facteurZoom = 1;
-    //}
+    if(keyEvent.haut){
+      vaisseau.acc = (vaisseau.fuel > 0 ) ? 0.0125 : 0;
+      son.play();
+    }
+    else{son.pause();}
 
 
     timeElapsed = (Date.now() - timeStart);
-    window.document.querySelector('#debug').innerHTML = 'PosX: ' + Math.floor(vaisseau.posX) + ' - PosY : ' + Math.floor(vaisseau.posY) + ' - Alt : ' + Math.floor(((vaisseau.posY - 5) - terrain[Math.floor(mod(vaisseau.posX,cfgTerrain.width))])) + ' - velX : ' + Math.floor(vaisseau.velX * 10) + ' - velY : ' + Math.floor(vaisseau.velY * 10) + '<br/> offsetX : ' + Math.floor(camera.offsetX) + ' - offsetY : ' + Math.floor(camera.offsetY) + ' - posYRel : ' + Math.floor(canvas.height - (vaisseau.posY) * camera.facteurZoom) + ' - posTerrainZoom : ' + Math.floor(((canvas.height - (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)]))));
     camera.update();
     renderGame(canvas);
     renderInfos(infos);
@@ -143,23 +138,22 @@ var updateGame = function(){
   else{ // Game over :(
     state = 'gameOver';
     showMessage('You died.<br/><br/>(noob.) <br/><br/>Press Space to restart');
-
   }
 };
 
 var initGame = function(){  
 
-  // génération du terrain
+  // Génération du terrain
   initializeTerrain();
-  generateTerrain(0, cfgTerrain.width -1, cfgTerrain.variance, cfgTerrain.amorti, 20);
+  generateTerrain(0, cfgTerrain.width -1, cfgTerrain.variance, cfgTerrain.amorti);
   plateformes = generatePlateformes(cfgTerrain.nbPlateformes);
  
-  // génération du ciel
+  // Génération du ciel
   generateSky(canvas.width, canvas.height, 1800);
 
   // Positionnement du vaisseau en haut et à gauche du point le plus haut
   // Et configuration de la limite basse de la caméra
-  let extremites = extremePoints(terrain);
+  var extremites = extremePoints(terrain);
   vaisseau.init(extremites.highest.x - 300, extremites.highest.y + 200);
   camera.bottom = extremites.lowest.y - 50;
   camera.init(vaisseau.posX, vaisseau.posY);
@@ -173,24 +167,24 @@ var initGame = function(){
     div.style.opacity = 0;
   });
 
-
-
-  showMessage('Appuyez sur espace pour jouer. <br /><br />Pour accéder directement à mon CV, il suffit d\'entrer le cheat code le plus célèbre de l\'histoire. (Ou vous pouvez aussi appuyer sur le bouton à côté de mon nom.)');
+  // Affichage du message d'accueil
+  showMessage('Appuyez sur espace pour jouer. <br/><br/>Pour accéder directement à mon CV, il suffit d\'entrer le code mystère. (Ou vous pouvez aussi appuyer sur le bouton à côté de mon nom.)');
 }
 
 var startGame = function(){
-  console.log(!(state == 'playing'));
   if(!(state == 'playing')){
     state = 'playing';
-    compteur = 0;
+    compteurCompetences = 0;
+    compteurFrames = 0;
+    scoreTemps = 0;
     timeStart = Date.now();
     updateGame();
     messageContainer.style.display = 'none';
   }
 };
 
-
-canvas.height = window.innerHeight - 270;
+// Initialise les taille des canvas et initialise le jeu
+canvas.height = window.innerHeight - 238;
 infos.height = 82;
 infos.width = document.body.clientWidth;
 canvas.width = document.body.clientWidth;

@@ -6,6 +6,7 @@ html {
 canvas{
   display: block;
 }
+
 nav{
   height: 50px;
   width: 960px;
@@ -30,14 +31,17 @@ nav a{
   display: none;
 }
 
-
 .navbar-droite{
   float: right;
   height:inherit;
 }
 
-nav a:hover{
+nav a:hover, #cheatButton:hover{
   color: black;
+}
+
+#cheatButton{
+  cursor: pointer;
 }
 
 /* Tooltip container */
@@ -107,11 +111,11 @@ nav a:hover{
 
 #barreCompetences div{
   opacity: 0;
-  /*-webkit-transition: opacity 2s ease-in;
-  -moz-transition: opacity 2s ease-in;
-  -o-transition: opacity 2s ease-in;
-  -ms-transition: opacity 2s ease-in;*/
-  transition: opacity 2s linear;
+  -webkit-transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+  -o-transition: opacity 1s linear;
+  -ms-transition: opacity 1s linear;
+  transition: opacity 1s linear;
   display: inline-block;
 }
 

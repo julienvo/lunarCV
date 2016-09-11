@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/fontello.css">
+
+  <script src="js/raf.js"></script>
   <script src="js/cheat.js"></script>
   <script src="js/infos.js"></script>
   <script src="js/main.js"></script>
@@ -15,21 +17,21 @@
   <script src="js/render.js"></script>
   <script src="js/vaisseau.js"></script>
   <script src="js/sky.js"></script>
+  <script src="js/sound.js"></script>
 </head>
 <body>
   <nav id="navbar">
     <div class="navbar-gauche">
       <span class="nom">Julien Vonau</span>
-      <span id="cheatButton" class="icon-mail"></span>
-      <a href="assets/cv.pdf"><span class="icon-doc-text tooltip"><span class="tooltiptext">Télécharger mon CV au format PDF</span></span></a>
+      <span id="cheatButton" class="icon-frown tooltip"><span class="tooltiptext">Voir mon CV sans jouer :(</span></span>
+      <a href="assets/cv.pdf"><span class="icon-down-circled2 tooltip"><span class="tooltiptext">Télécharger mon CV au format PDF</span></span></a>
     </div>
     <div class="navbar-droite">
-      <a href="mailto:contact@julienvo.com"><span class="icon-mail"></span></a>
+      <a href="mailto:contact@julienvo.com"><span class="icon-mail-squared"></span></a>
       <a href="https://github.com/julienvo"><span class="icon-github-squared"></span></a>
       <a href="linkedin.com"><span class="icon-linkedin-squared"></span></a>
     </div>
   </nav>
-  <div id='debug'></div>
   <canvas id="infos"></canvas><canvas id="canvas"></canvas>
   <div id="messageContainer"><div id="message"></div></div>
   <div id="barreCompetences">

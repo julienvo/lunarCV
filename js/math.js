@@ -11,12 +11,12 @@ var extremePoints = function(terrain) {
         return -1;
     }
 
-    let max = terrain[0];
-    let min = terrain[0];
-    let indexMax = 0;
-    let indexMin = 0;
+    var max = terrain[0];
+    var min = terrain[0];
+    var indexMax = 0;
+    var indexMin = 0;
 
-    for (let i = 1; i < terrain.length; i++) {
+    for (var i = 1; i < terrain.length; i++) {
         if (terrain[i] > max) {
           indexMax = i;
           max = terrain[i];
@@ -30,18 +30,20 @@ var extremePoints = function(terrain) {
     return {highest: {x: indexMax, y: max}, lowest: {x: indexMin, y: min}};
 }
 
+// Formate le temps écoulé au format m:ss
 var formatTime = function(time){
   if(isNaN(time)){
     return '0:00'
   }
-  let secs = Math.floor(time / 1000);
-  let mins = Math.floor(secs / 60);
+  var secs = Math.floor(time / 1000);
+  var mins = Math.floor(secs / 60);
   secs = secs % 60;
   if (secs < 10) secs = "0" + secs;
   return mins + ":" + secs;
 
 };
 
+// Retourne true si les contenus des 2 tableaux passés en arguments sont identiques
 function arraysEqual(arr1, arr2) {
     if(arr1.length !== arr2.length)
         return false;
@@ -50,4 +52,4 @@ function arraysEqual(arr1, arr2) {
             return false;
     }
     return true;
-}
+};

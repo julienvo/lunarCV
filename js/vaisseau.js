@@ -1,5 +1,6 @@
 var vaisseau = {
-  fuel: 400,
+  maxFuel: 400,
+  fuel: 0,
   posX: 0,
   posY: 0,
   angle: 0,
@@ -9,10 +10,12 @@ var vaisseau = {
   crash: false,
   pose: false,
   currentPlatform: null,
-  vlimX: 1,
-  vlimY: 1.5,
+  vlimX: 0.8,
+  vlimY: 1,
+  lastVelX: 0,
+  lastVelY: 0,
   init: function(x, y){
-    this.fuel = 400;
+    this.fuel = this.maxFuel;
     this.posX = x;
     this.posY = y;
     this.angle = 0;
@@ -29,11 +32,11 @@ var vaisseau = {
 // Retourne la plateforme sur laquelle le vaisseau est posé
 // Retourne null si le vaisseau est crashé dans le décor
 var isOnPlatform = function(vaisseau, plateformes){
-  for(i of plateformes){
-    if(mod((vaisseau.posX), cfgTerrain.width) >= i.index + 5 && mod((vaisseau.posX), cfgTerrain.width) <= i.index + 15) {
+  for(var i=0; i< plateformes.length; i++){
+    if(mod((vaisseau.posX), cfgTerrain.width) >= plateformes[i].index + 7 && mod((vaisseau.posX), cfgTerrain.width) <= plateformes[i].index + 23) {
       //console.log('isOK')
       //i.isActive = false;
-      return i;
+      return plateformes[i];
     }
   }
   //console.log('isPasOK')
@@ -41,29 +44,36 @@ var isOnPlatform = function(vaisseau, plateformes){
 }
 
 var updateVaisseau = function(){
-  vaisseau.fuel -= 3 * vaisseau.acc;
-
+  vaisseau.fuel = Math.max(vaisseau.fuel - 3 * vaisseau.acc, 0);
   vaisseau.velX += vaisseau.acc * Math.sin(vaisseau.angle);
   vaisseau.velY += vaisseau.acc * Math.cos(vaisseau.angle) - gravite;
   vaisseau.posX += vaisseau.velX; 
   vaisseau.posY += vaisseau.velY;
 
-
-  for(let x = -5; x < 5; x++){
+  for(var x = -7; x < 7; x++){
     // Si contact avec le terrain
-    if((vaisseau.posY - 5) <= terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] ){
+    if((vaisseau.posY - 9) <= terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] ){
       vaisseau.currentPlatform = isOnPlatform(vaisseau, plateformes);
       // Si le vaisseau va trop vite, est de travers ou n'est pas entièrement posé sur une plateforme
-      if(vaisseau.velY < - vaisseau.vlimY || Math.abs(vaisseau.velX) > vaisseau.vlimX || vaisseau.currentPlatform == null){
-          //console.log('crash');
+      if(vaisseau.velY < - vaisseau.vlimY || Math.abs(vaisseau.velX) > vaisseau.vlimX || vaisseau.currentPlatform == null || (mod(vaisseau.angle, 2*Math.PI) < 11 * Math.PI / 6 && mod(vaisseau.angle, 2* Math.PI) > Math.PI /6)){
+          if(debug){
+            console.log('crash');
+          }
           vaisseau.crash = true;
       }
       else if(!vaisseau.crash && !vaisseau.pose){
-        //console.log('posé');
+        if(debug){
+          console.log('posé');
+        }
         vaisseau.pose = true;
-        // Le vaisseau est replacé vers le haut et à la bonne altitude poour éviter des bugs de collision
+        // Le vaisseau est replacé vers le haut et à la bonne altitude pour éviter des bugs de collision
         vaisseau.angle = 0;
-        vaisseau.posY = terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] + 5
+        vaisseau.posY = terrain[mod(Math.floor(vaisseau.posX + x),cfgTerrain.width)] + 9
+        
+        // La vitesse du vaisseau juste avant qu'il ne touche la plateforme est stockée
+        // pour pouvoir calculer le score à la prochaine frame
+        vaisseau.lastVelX = vaisseau.velX;
+        vaisseau.lastVelY = vaisseau.velY;
       }
 
       gravite = 0;
