@@ -34,12 +34,9 @@ var vaisseau = {
 var isOnPlatform = function(vaisseau, plateformes){
   for(var i=0; i< plateformes.length; i++){
     if(mod((vaisseau.posX), cfgTerrain.width) >= plateformes[i].index + 7 && mod((vaisseau.posX), cfgTerrain.width) <= plateformes[i].index + 23) {
-      //console.log('isOK')
-      //i.isActive = false;
       return plateformes[i];
     }
   }
-  //console.log('isPasOK')
   return null;
 }
 
@@ -56,15 +53,9 @@ var updateVaisseau = function(){
       vaisseau.currentPlatform = isOnPlatform(vaisseau, plateformes);
       // Si le vaisseau va trop vite, est de travers ou n'est pas entièrement posé sur une plateforme
       if(vaisseau.velY < - vaisseau.vlimY || Math.abs(vaisseau.velX) > vaisseau.vlimX || vaisseau.currentPlatform == null || (mod(vaisseau.angle, 2*Math.PI) < 11 * Math.PI / 6 && mod(vaisseau.angle, 2* Math.PI) > Math.PI /6)){
-          if(debug){
-            console.log('crash');
-          }
           vaisseau.crash = true;
       }
       else if(!vaisseau.crash && !vaisseau.pose){
-        if(debug){
-          console.log('posé');
-        }
         vaisseau.pose = true;
         // Le vaisseau est replacé vers le haut et à la bonne altitude pour éviter des bugs de collision
         vaisseau.angle = 0;

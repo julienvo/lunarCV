@@ -18,9 +18,6 @@ var generateTerrain = function(indexDepart, indexArrivee, variance, amorti){
   if(indexDepart + 1 == indexArrivee) { return;}
   var indexMilieu = Math.floor((indexDepart + indexArrivee ) / 2);
   terrain[indexMilieu] = (terrain[indexDepart] + terrain[indexArrivee]) / 2 + (Math.random() - 0.3) * variance;
-  if(debug){
-    console.log(terrain[indexDepart], terrain[indexMilieu], terrain[indexArrivee]);
-  }
   generateTerrain(indexDepart, indexMilieu, variance * amorti, amorti * 0.75);
   generateTerrain(indexMilieu, indexArrivee, variance * amorti, amorti * 0.75);
 };
@@ -40,9 +37,6 @@ var generatePlateformes = function(nbPlateformes){
           isValid = false;
         }
       }
-    }
-    if(debug){
-      console.log(indexPlateforme);
     }
     // Ajout de la plateforme à la liste des plateformes
     plateformes.push({index: indexPlateforme, isActive: true});

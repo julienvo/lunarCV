@@ -156,7 +156,7 @@ window.addEventListener('load', function(event){
       boom.play();
       if(vaisseau.fuel > 0){ // try again
         state = 'crash';
-        showMessage('Vous vous êtes crashé. Appuyez sur espace pour reprendre depuis un endroit sur.');
+        showMessage('Vous vous êtes crashé. Appuyez sur espace pour reprendre depuis un endroit sûr.');
       }
       else{ // game over
         state = 'gameOver';

@@ -5,6 +5,7 @@ var camera = {
   marginX: 150,
   marginY: 100,
   isZoomed: false,
+  facteurZoom: 1,
   bottom: 0,
   // Place l'objet caméra de façon à ce que l'objet principal soit
   // en haut à gauche de l'écran
@@ -15,16 +16,28 @@ var camera = {
 
   update: function(){
 
+  if(vaisseau.posY < (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 100) && !this.isZoomed){
+    this.isZoomed = true;
+    this.facteurZoom = 2;
+    this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) / this.facteurZoom;
+    this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) / this.facteurZoom;
+  }
+  else if(vaisseau.posY > (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 150) && this.isZoomed){
+    this.isZoomed = false;
+    this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) * this.facteurZoom;
+    this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) * this.facteurZoom;
+    this.facteurZoom = 1;
+  }
+
     // L'objet caméra se déplace si le joueur s'approche des bords gauche et droite de l'écran
-    if((vaisseau.posX - this.offsetX > canvas.width - this.marginX && vaisseau.velX > 0) || (vaisseau.posX - this.offsetX  < this.marginX && vaisseau.velX < 0)){
+    if(((vaisseau.posX - this.offsetX) * camera.facteurZoom > canvas.width - this.marginX && vaisseau.velX > 0) || ((vaisseau.posX - this.offsetX) * camera.facteurZoom  < this.marginX && vaisseau.velX < 0)){
       this.offsetX += vaisseau.velX;
     }
 
     // L'objet caméra se positionne de façon à afficher le joueur à marginY pixels du haut de l'écran
-    this.offsetY = vaisseau.posY - canvas.height + this.marginY;
+    this.offsetY = (this.marginY - canvas.height)/ this.facteurZoom + vaisseau.posY
     // Sauf si le joueur est trop près du bas du terrain, dans ce cas la caméra ne descend pas.
     if(this.offsetY < this.bottom){
-      console.log(this.bottom);
       this.offsetY = this.bottom;
     }
   }
@@ -53,12 +66,12 @@ var renderGame = function(canvas){
   ctx.fillRect(0,0,canvas.width, canvas.height);
 
   // Dessin du vaisseau
-  ctx.translate((vaisseau.posX - camera.offsetX), canvas.height - (vaisseau.posY - camera.offsetY));
+  ctx.translate((vaisseau.posX - camera.offsetX) * camera.facteurZoom, canvas.height - (vaisseau.posY - camera.offsetY) * camera.facteurZoom);
   ctx.rotate(vaisseau.angle);
   ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 1;
+  ctx.lineWidth = 1/ camera.facteurZoom;
   //Corps
-  //ctx.scale(4,4)
+  ctx.scale(camera.facteurZoom, camera.facteurZoom)
   ctx.beginPath();
   ctx.moveTo(2,-4);
   ctx.lineTo(4, -2);
@@ -104,8 +117,8 @@ var renderGame = function(canvas){
 
   ctx.fillStyle = '#fff';
   for(var i in stars){
-    if(stars[i].y > terrain[mod(Math.floor(stars[i].x + camera.offsetX),cfgTerrain.width)] - Math.floor(camera.offsetY)){
-      ctx.fillRect(stars[i].x, canvas.height - stars[i].y, stars[i].size, stars[i].size);
+    if(stars[i].y > (terrain[mod(stars[i].x + Math.floor(camera.offsetX),cfgTerrain.width)]  - Math.floor(camera.offsetY)) * camera.facteurZoom){
+      ctx.fillRect(stars[i].x * camera.facteurZoom, canvas.height - stars[i].y, stars[i].size, stars[i].size);
     }
   }
 
@@ -114,8 +127,8 @@ var renderGame = function(canvas){
   ctx.lineWidth = 1;
   ctx.moveTo(0, canvas.height - (terrain[mod(Math.floor(camera.offsetX), cfgTerrain.width)] - Math.floor(camera.offsetY)));
   ctx.beginPath();
-  for(var i = 0; i <= canvas.width; i++){
-    ctx.lineTo(i, canvas.height - (terrain[mod(i + Math.floor(camera.offsetX),cfgTerrain.width)]  - Math.floor(camera.offsetY)));
+  for(var i = 0; i <= canvas.width / camera.facteurZoom; i++){
+    ctx.lineTo(i * camera.facteurZoom, canvas.height - (terrain[mod(i + Math.floor(camera.offsetX),cfgTerrain.width)]  - Math.floor(camera.offsetY)) * camera.facteurZoom);
   }
   ctx.stroke();
 
@@ -129,7 +142,9 @@ var renderGame = function(canvas){
       ctx.strokeStyle = '#888';
     }
     else {ctx.strokeStyle = '#fff'}
-    ctx.strokeRect(mod((plateformes[i].index + 2 - (vaisseau.posX - (vaisseau.posX - camera.offsetX))), cfgTerrain.width), canvas.height - terrain[plateformes[i].index] + camera.offsetY + 1, 26, 1);
+    //ctx.strokeRect(mod((plateformes[i].index + 2 - (vaisseau.posX - (vaisseau.posX - camera.offsetX))), cfgTerrain.width), canvas.height - terrain[plateformes[i].index] + camera.offsetY + 1, 26 * camera.facteurZoom, camera.facteurZoom);
+      ctx.strokeRect(mod((plateformes[i].index + 2 - camera.offsetX), cfgTerrain.width) * camera.facteurZoom, canvas.height - (terrain[plateformes[i].index] - camera.offsetY) * camera.facteurZoom + 1, 26 * camera.facteurZoom, camera.facteurZoom);
+
   }
 };
 
