@@ -32,8 +32,8 @@ nav a{
 }
 
 .navbar-droite{
+  margin-top: 10px;
   float: right;
-  height:inherit;
 }
 
 nav a:hover, #cheatButton:hover{
@@ -128,6 +128,22 @@ nav a:hover, #cheatButton:hover{
   height: 80px;
   width: auto;
   display: block;
+}
+#soundButton{
+  position: fixed;
+  right: 5%;
+  top: 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 20px;
+  background-color: gray;
+  border: solid #bfbfbf 1px;
+  text-decoration: none;
+}
+
+#soundButton:hover {
+  background-color: #000;
+  text-decoration: none;
 }
 
 #debug{
