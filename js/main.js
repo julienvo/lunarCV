@@ -8,7 +8,7 @@ var keyEvent = {
   entree: false
 };
 
-var timeStart, timeElapsed, compteur, compteurFrames;
+var timeStart, timeElapsed, compteurCompetences, compteurFrames;
 var state = 'start';
 var score = 8000;
 
