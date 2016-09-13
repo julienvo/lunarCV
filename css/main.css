@@ -6,6 +6,7 @@ html {
 canvas{
   display: block;
 }
+
 nav{
   height: 50px;
   width: 960px;
@@ -30,14 +31,17 @@ nav a{
   display: none;
 }
 
-
 .navbar-droite{
+  margin-top: 10px;
   float: right;
-  height:inherit;
 }
 
-nav a:hover{
+nav a:hover, #cheatButton:hover{
   color: black;
+}
+
+#cheatButton{
+  cursor: pointer;
 }
 
 /* Tooltip container */
@@ -78,11 +82,20 @@ nav a:hover{
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+
+/* Corps */
+
+#container:{
+  position: relative;
+}
+
 #messageContainer{
   position: absolute;
-  top: 300px;
-  margin-left: 40%;
   display: none;
+  left: 50%;
+  top: 50%;
+  margin: -100px 0 0 -200px;
   border: 1px dashed white;
   border-radius: 10px;
   background: #000;
@@ -107,11 +120,11 @@ nav a:hover{
 
 #barreCompetences div{
   opacity: 0;
-  /*-webkit-transition: opacity 2s ease-in;
-  -moz-transition: opacity 2s ease-in;
-  -o-transition: opacity 2s ease-in;
-  -ms-transition: opacity 2s ease-in;*/
-  transition: opacity 2s linear;
+  -webkit-transition: opacity 1s linear;
+  -moz-transition: opacity 1s linear;
+  -o-transition: opacity 1s linear;
+  -ms-transition: opacity 1s linear;
+  transition: opacity 1s linear;
   display: inline-block;
 }
 
@@ -124,6 +137,22 @@ nav a:hover{
   height: 80px;
   width: auto;
   display: block;
+}
+#soundButton{
+  position: fixed;
+  right: 5%;
+  top: 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 20px;
+  background-color: gray;
+  border: solid #bfbfbf 1px;
+  text-decoration: none;
+}
+
+#soundButton:hover {
+  background-color: #000;
+  text-decoration: none;
 }
 
 #debug{
