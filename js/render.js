@@ -13,21 +13,24 @@ var camera = {
     this.offsetX = x - this.marginX;
     this.offsetY = y + this.marginY - canvas.height;
   },
-
   update: function(){
-
-  if(vaisseau.posY < (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 100) && !this.isZoomed){
-    this.isZoomed = true;
-    this.facteurZoom = 2;
-    this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) / this.facteurZoom;
-    this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) / this.facteurZoom;
-  }
-  else if(vaisseau.posY > (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 150) && this.isZoomed){
-    this.isZoomed = false;
-    this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) * this.facteurZoom;
-    this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) * this.facteurZoom;
-    this.facteurZoom = 1;
-  }
+    // Si le vaisseau s'approche du sol, la caméra zoome
+    if(vaisseau.posY < (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 100) && !this.isZoomed){
+      this.isZoomed = true;
+      this.facteurZoom = 2;
+      // La position de la caméra change de façon à ce que la position relative du vaisseau
+      // par rapport à l'écran soit la même après le zoom
+      this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) / this.facteurZoom;
+      this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) / this.facteurZoom;
+    }// Si le vaisseau s'éloigne, la caméra revient à son zoom initial
+    else if(vaisseau.posY > (terrain[mod(Math.floor(vaisseau.posX),cfgTerrain.width)] + 150) && this.isZoomed){
+      this.isZoomed = false;      
+      // La position de la caméra change de façon à ce que la position relative du vaisseau
+      // par rapport à l'écran soit la même après le zoom
+      this.offsetX = vaisseau.posX - (vaisseau.posX - this.offsetX) * this.facteurZoom;
+      this.offsetY = vaisseau.posY - (vaisseau.posY - this.offsetY) * this.facteurZoom;
+      this.facteurZoom = 1;
+    }
 
     // L'objet caméra se déplace si le joueur s'approche des bords gauche et droite de l'écran
     if(((vaisseau.posX - this.offsetX) * camera.facteurZoom > canvas.width - this.marginX && vaisseau.velX > 0) || ((vaisseau.posX - this.offsetX) * camera.facteurZoom  < this.marginX && vaisseau.velX < 0)){
@@ -45,14 +48,17 @@ var camera = {
 
 
 // Modifie la taille du canvas si l'utilisateur modifie la taille de la fenêtre
-window.addEventListener('resize', function(){
-  canvas.height = window.innerHeight - 238;
-  infos.height = 82;
-  infos.width = document.body.clientWidth;
-  canvas.width = document.body.clientWidth;
-  renderGame(canvas);
-  renderInfos(infos);
-}, false);
+
+// Désactivé pour l'instant, il faudrait regénérer les étoiles si la fenêtre s'agrandit
+
+//window.addEventListener('resize', function(){
+//  canvas.height = window.innerHeight - 238;
+//  infos.height = 82;
+//  infos.width = document.body.clientWidth;
+//  canvas.width = document.body.clientWidth;
+//  renderGame(canvas);
+//  renderInfos(infos);
+//}, false);
 
 
 // Affiche le jeu
@@ -66,10 +72,13 @@ var renderGame = function(canvas){
   ctx.fillRect(0,0,canvas.width, canvas.height);
 
   // Dessin du vaisseau
+  
+  var ctx = canvas.getContext('2d');
+  ctx.save();
   ctx.translate((vaisseau.posX - camera.offsetX) * camera.facteurZoom, canvas.height - (vaisseau.posY - camera.offsetY) * camera.facteurZoom);
   ctx.rotate(vaisseau.angle);
   ctx.strokeStyle = "#fff";
-  ctx.lineWidth = 1/ camera.facteurZoom;
+  ctx.lineWidth = 1 / camera.facteurZoom;
   //Corps
   ctx.scale(camera.facteurZoom, camera.facteurZoom)
   ctx.beginPath();
@@ -86,23 +95,23 @@ var renderGame = function(canvas){
   // Patte gauche
   ctx.moveTo(-2, 4);
   ctx.lineTo(-5, 8);
-  //Pied gauche
+  // Pied gauche
   ctx.moveTo(-7, 8);
   ctx.lineTo(-3, 8);
-  //Patte droite
+  // Patte droite
   ctx.moveTo(2, 4);
   ctx.lineTo(5, 8);
-  //Pied droit
+  // Pied droit
   ctx.moveTo(7, 8);
   ctx.lineTo(3, 8);
-  //Reacteur
+  // Reacteur
   ctx.moveTo(-1, 4);
   ctx.lineTo(-2.5, 8);
   ctx.moveTo(1, 4);
   ctx.lineTo(2.5, 8);
   ctx.moveTo(2,7);
   ctx.lineTo(-2,7);
-  //Flamme si le vaisseau accélère
+  // Flamme si le vaisseau accélère
   if(vaisseau.acc != 0){
     ctx.lineTo(0,16.5 + 3 * Math.random());
     ctx.closePath();
@@ -110,8 +119,6 @@ var renderGame = function(canvas){
   ctx.stroke();
 
   ctx.restore(); // coord défaut, pile vide
-
-
 
   // Dessin du ciel
 
@@ -142,10 +149,15 @@ var renderGame = function(canvas){
       ctx.strokeStyle = '#888';
     }
     else {ctx.strokeStyle = '#fff'}
-    //ctx.strokeRect(mod((plateformes[i].index + 2 - (vaisseau.posX - (vaisseau.posX - camera.offsetX))), cfgTerrain.width), canvas.height - terrain[plateformes[i].index] + camera.offsetY + 1, 26 * camera.facteurZoom, camera.facteurZoom);
       ctx.strokeRect(mod((plateformes[i].index + 2 - camera.offsetX), cfgTerrain.width) * camera.facteurZoom, canvas.height - (terrain[plateformes[i].index] - camera.offsetY) * camera.facteurZoom + 1, 26 * camera.facteurZoom, camera.facteurZoom);
 
   }
+
+  // Dessin du score si on vient de se poser sur une plateforme
+  if(scoreObj.isActive){
+    scoreObj.render();
+  }
+
 };
 
 // Affiche les informations du jeu (multipliées de façon à avoir des valeurs lisibles)
@@ -154,7 +166,7 @@ var renderInfos = function(canvas){
   ctx.fillStyle = '#000';
   ctx.fillRect(0,0,canvas.width, canvas.height);
   ctx.fillStyle = '#fff';
-  ctx.font = '16px Arial';
+  ctx.font = '16px jurabook';
   ctx.fillText('Score : ' + score, 50, 26);
   ctx.fillText('Time : ' + formatTime(timeElapsed), 50, 52);
   ctx.fillText('Fuel : ' + Math.floor(vaisseau.fuel), 50, 78);
@@ -162,6 +174,7 @@ var renderInfos = function(canvas){
   ctx.fillText("Horizontal speed : ", canvas.width - 250, 52);
   ctx.fillText("Vertical speed : ", canvas.width - 250, 78);
 
+  // Si les vitesses sont trop élevées, elles sont affichées en rouge
   if(Math.abs(vaisseau.velX) > vaisseau.vlimX){
     ctx.fillStyle = 'red';
   }

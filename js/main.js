@@ -1,5 +1,3 @@
-var debug = false;
-
 var keyEvent = {
   gauche: false,
   droite: false,
@@ -27,11 +25,6 @@ window.addEventListener('load', function(event){
     }
 
     switch(code){
-      case 13:
-      event.preventDefault();
-      keyEvent.entree = true;
-      break;
-
       case 32:
       event.preventDefault();
       if( state == 'crash'){ // Repart depuis un endroit sur, en gardant les compétences déjà acquises
@@ -41,7 +34,7 @@ window.addEventListener('load', function(event){
         updateGame();
       }
       else{
-        if(state == 'gameOver'){ // Restart complètement
+        if(state == 'gameOver'){ // Réinitialise complètement le jeu
           initGame();
         }
         startGame();
@@ -74,14 +67,11 @@ window.addEventListener('load', function(event){
     event.preventDefault();
     var code = event.keyCode;
     switch(code){            
-      case 13:
-      keyEvent.entree = false;
-      break;
       case 37:
       keyEvent.gauche = false;
       break;
       case 38:
-      son.pause();
+      thrust.pause();
       keyEvent.haut = false;
       break;
       case 39:
@@ -94,6 +84,8 @@ window.addEventListener('load', function(event){
   };
 
   var updateGame = function(){
+    
+    // Le score baisse avec le temps
     compteurFrames++;
     if(compteurFrames % 50 == 0){
       score -= 50;
@@ -119,6 +111,7 @@ window.addEventListener('load', function(event){
           competence.className = '';
           setTimeout(function(){competence.style.opacity = 1;}, 100);
           compteurCompetences++;
+          scoreObj.init(vaisseau.posX, vaisseau.posY + 15, Math.max(Math.round(2000 * (1-(vaisseau.lastVelX - vaisseau.lastVelY))), 0));
         }
       }
       else{ // Le vaisseau ne peut pas tourner si il est posé sur une plateforme
@@ -133,19 +126,21 @@ window.addEventListener('load', function(event){
       if(keyEvent.haut){
         if(vaisseau.fuel > 0){
           vaisseau.acc = 0.0125;
-          son.play();
+          thrust.play();
         }
         else{
           vaisseau.acc = 0;
-          son.pause();
+          thrust.pause();
         }
       }
       else{
         vaisseau.acc = 0;
-        son.pause();
+        thrust.pause();
       }
 
-
+      if(scoreObj.isActive){
+        scoreObj.update();
+      }
       timeElapsed = (Date.now() - timeStart);
       camera.update();
       renderGame(canvas);
@@ -157,6 +152,7 @@ window.addEventListener('load', function(event){
       if(vaisseau.fuel > 0){ // try again
         state = 'crash';
         showMessage('Vous vous êtes crashé. Appuyez sur espace pour reprendre depuis un endroit sûr.');
+        score -= 1000;
       }
       else{ // game over
         state = 'gameOver';

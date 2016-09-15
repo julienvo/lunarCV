@@ -48,6 +48,4 @@ var generatePlateformes = function(nbPlateformes){
     }
   }
   return plateformes;
-
-  return plateformes;
 };

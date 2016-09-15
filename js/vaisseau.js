@@ -26,7 +26,7 @@ var vaisseau = {
     this.pose = false;
     this.currentPlatform = null;
   }
-};
+}
 
 
 // Retourne la plateforme sur laquelle le vaisseau est posé
@@ -38,8 +38,9 @@ var isOnPlatform = function(vaisseau, plateformes){
     }
   }
   return null;
-}
+};
 
+// Mise à jour des données du vaisseau
 var updateVaisseau = function(){
   vaisseau.fuel = Math.max(vaisseau.fuel - 3 * vaisseau.acc, 0);
   vaisseau.velX += vaisseau.acc * Math.sin(vaisseau.angle);
@@ -55,7 +56,7 @@ var updateVaisseau = function(){
       if(vaisseau.velY < - vaisseau.vlimY || Math.abs(vaisseau.velX) > vaisseau.vlimX || vaisseau.currentPlatform == null || (mod(vaisseau.angle, 2*Math.PI) < 11 * Math.PI / 6 && mod(vaisseau.angle, 2* Math.PI) > Math.PI /6)){
           vaisseau.crash = true;
       }
-      else if(!vaisseau.crash && !vaisseau.pose){
+      else if(!vaisseau.crash && !vaisseau.pose){ // Si on vient de se poser sur une plateforme
         vaisseau.pose = true;
         // Le vaisseau est replacé vers le haut et à la bonne altitude pour éviter des bugs de collision
         vaisseau.angle = 0;
@@ -72,7 +73,7 @@ var updateVaisseau = function(){
       vaisseau.velX = 0;
       vaisseau.velY = 0;
     }
-    else{
+    else{ // Si le vaisseau est en vol
       vaisseau.pose = false;
       gravite = 0.005;
     }

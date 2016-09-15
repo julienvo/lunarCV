@@ -1,9 +1,10 @@
+/* font-awesome, mais seulement les 6 icones utilisées */
 @font-face {
   font-family: 'fontello';
   src: url('../font/fontello.eot?2261559');
   src: url('../font/fontello.eot?2261559#iefix') format('embedded-opentype'),
        url('../font/fontello.woff2?2261559') format('woff2'),
-       url('../font/fontello.woff?2261559') format('woff'),
+       url('../font/fontello.woff') format('woff'),
        url('../font/fontello.ttf?2261559') format('truetype'),
        url('../font/fontello.svg?2261559#fontello') format('svg');
   font-weight: normal;

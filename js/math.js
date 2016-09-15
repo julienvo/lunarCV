@@ -44,7 +44,7 @@ var formatTime = function(time){
 };
 
 // Retourne true si les contenus des 2 tableaux passés en arguments sont identiques
-function arraysEqual(arr1, arr2) {
+var arraysEqual = function(arr1, arr2) {
     if(arr1.length !== arr2.length)
         return false;
     for(var i = arr1.length; i--;) {
