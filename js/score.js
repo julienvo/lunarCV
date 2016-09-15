@@ -22,7 +22,7 @@ var scoreObj = {
     }
   },
   render: function() {
-    ctx = canvas.getContext('2d');
+    var ctx = canvas.getContext('2d');
     ctx.save();
     ctx.font = this.taille + "px jurabook";
     ctx.textAlign = 'center';
